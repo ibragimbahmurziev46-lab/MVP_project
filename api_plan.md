@@ -34,6 +34,7 @@
 - GET `/certificates/verify/{code}` — проверка по коду
 
 ## Коды ошибок
+HEAD
 400, 401, 403, 404, 409, 422 Добавить эндпоинт Get /materials 
 ## Курсы
 - GET /courses
@@ -41,3 +42,10 @@
 
 
 Версия API: main
+
+400, 401, 403, 404, 409, 422
+
+Версия API: auth
+feature/auth
+
+Версия API: main + auth
