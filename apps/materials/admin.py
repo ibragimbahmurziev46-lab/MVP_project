@@ -15,7 +15,9 @@ class MaterialAdmin(admin.ModelAdmin):
         "material_type",
         "is_published",
         "created_at",
-        "updated_at",
+        "updated_at",  
+
+        
     )
     list_filter = ("material_type", "subject", "grade", "is_published")
     search_fields = ("title",)

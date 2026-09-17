@@ -9,6 +9,11 @@ class GradeAdmin(admin.ModelAdmin):
     ordering = ("number",)
 
 
+
+
+
+
+
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
     list_display = ("name", "slug", "is_active", "order")
