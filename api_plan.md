@@ -38,3 +38,6 @@
 ## Курсы
 - GET /courses
 - POST /courses
+
+
+Версия API: main
