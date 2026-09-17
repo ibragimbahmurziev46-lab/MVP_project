@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% block title %}{{ material.title }} · Портал учителя{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+            <h1 class="text-2xl font-semibold">{{ material.title }}</h1>
+            <p class="text-sm text-neutral-500 mt-1">
+                {{ material.subject.name }} · {{ material.grade.number }} класс · {{ material.material_type.name }}
+            </p>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="{% url 'materials:list' %}" class="px-3 py-2 rounded-lg text-sm text-neutral-600 hover:bg-neutral-100">← Назад</a>
+        </div>
+    </div>
+
+    <form method="post" id="material-form">
+        {% csrf_token %}
+        <input type="hidden" name="content" id="content-input">
+
+        <div class="bg-white rounded-xl border border-neutral-200 overflow-hidden shadow-sm">
+            <!-- Toolbar -->
+            <div class="flex flex-wrap items-center gap-1 border-b border-neutral-200 bg-neutral-50 px-3 py-2 text-sm">
+                <button type="button" data-cmd="undo" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200" title="Отменить">↶</button>
+                <button type="button" data-cmd="redo" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200" title="Повторить">↷</button>
+                <span class="mx-1 text-neutral-300">|</span>
+                <button type="button" data-cmd="h1" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200 font-bold">H1</button>
+                <button type="button" data-cmd="h2" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200 font-bold">H2</button>
+                <button type="button" data-cmd="h3" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200 font-bold">H3</button>
+                <span class="mx-1 text-neutral-300">|</span>
+                <button type="button" data-cmd="bold" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200 font-semibold">Ж</button>
+                <button type="button" data-cmd="italic" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200 italic">К</button>
+                <span class="mx-1 text-neutral-300">|</span>
+                <button type="button" data-cmd="bulletList" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200">• Список</button>
+                <button type="button" data-cmd="orderedList" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200">1. Список</button>
+                <span class="mx-1 text-neutral-300">|</span>
+                <button type="button" data-cmd="insertTable" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200">Таблица</button>
+                <button type="button" data-cmd="addRow" class="toolbar-btn px-2 py-1 rounded hover:bg-neutral-200">+ Строка</button>
+                <span class="mx-1 text-neutral-300">|</span>
+
+                <!-- AI-команды -->
+                <div class="relative ml-auto" x-cloak>
+                    <button type="button" id="ai-menu-btn"
+                            class="px-3 py-1.5 rounded-lg bg-neutral-900 text-white text-sm font-medium">
+                        ✦ AI-команда ▾
+                    </button>
+                    <div id="ai-menu" class="hidden absolute right-0 mt-2 w-64 bg-white border border-neutral-200 rounded-xl shadow-lg z-10 py-1 text-sm">
+                        <button type="button" data-ai="shorten" class="block w-full text-left px-4 py-2 hover:bg-neutral-50">Сократить</button>
+                        <button type="button" data-ai="expand" class="block w-full text-left px-4 py-2 hover:bg-neutral-50">Расширить</button>
+                        <button type="button" data-ai="simplify" class="block w-full text-left px-4 py-2 hover:bg-neutral-50">Сделать понятнее</button>
+                        <button type="button" data-ai="adapt" class="block w-full text-left px-4 py-2 hover:bg-neutral-50">Адаптировать для другого класса</button>
+                        <button type="button" data-ai="example" class="block w-full text-left px-4 py-2 hover:bg-neutral-50">Добавить пример</button>
+                        <button type="button" data-ai="task" class="block w-full text-left px-4 py-2 hover:bg-neutral-50">Добавить практическое задание</button>
+                        <button type="button" data-ai="questions" class="block w-full text-left px-4 py-2 hover:bg-neutral-50">Добавить вопросы</button>
+                        <button type="button" data-ai="check" class="block w-full text-left px-4 py-2 hover:bg-neutral-50">Проверить ошибки</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editor -->
+            <div id="editor" class="prose max-w-none p-6 min-h-[420px] focus:outline-none">
+                {{ content|safe }}
+            </div>
+
+            <div id="ai-status" class="px-6 py-2 text-sm text-neutral-400 hidden">Обработка AI…</div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 mt-4">
+            <button type="submit" name="action" value="save" class="px-6 py-2.5 rounded-lg bg-neutral-900 text-white font-medium hover:bg-neutral-700">
+                Сохранить
+            </button>
+            <button type="submit" name="action" value="regenerate"
+                    class="px-6 py-2.5 rounded-lg border border-neutral-300 text-neutral-700 font-medium hover:bg-neutral-50">
+                Сгенерировать заново
+            </button>
+            <div class="flex-1"></div>
+            {% if material.is_published %}
+                <button type="submit" name="action" value="unpublish"
+                        class="px-6 py-2.5 rounded-lg border border-emerald-300 text-emerald-700 font-medium hover:bg-emerald-50">
+                    В библиотеке · Скрыть
+                </button>
+            {% else %}
+                <button type="submit" name="action" value="publish"
+                        class="px-6 py-2.5 rounded-lg border border-neutral-300 text-neutral-700 font-medium hover:bg-neutral-50">
+                    Опубликовать в библиотеке
+                </button>
+            {% endif %}
+            <a href="{% url 'materials:export' material.pk 'docx' %}"
+               class="px-6 py-2.5 rounded-lg border border-neutral-300 text-neutral-700 font-medium hover:bg-neutral-50">
+                Скачать DOCX
+            </a>
+            <a href="{% url 'materials:export' material.pk 'pdf' %}"
+               class="px-6 py-2.5 rounded-lg border border-neutral-300 text-neutral-700 font-medium hover:bg-neutral-50">
+                Скачать PDF
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="importmap">
+{
+    "imports": {
+        "@tiptap/core": "https://unpkg.com/@tiptap/core@2/dist/index.js",
+        "@tiptap/pm": "https://unpkg.com/@tiptap/pm@2/dist/index.js",
+        "@tiptap/starter-kit": "https://unpkg.com/@tiptap/starter-kit@2/dist/index.js",
+        "@tiptap/extension-table": "https://unpkg.com/@tiptap/extension-table@2/dist/index.js",
+        "@tiptap/extension-table-row": "https://unpkg.com/@tiptap/extension-table-row@2/dist/index.js",
+        "@tiptap/extension-table-cell": "https://unpkg.com/@tiptap/extension-table-cell@2/dist/index.js",
+        "@tiptap/extension-table-header": "https://unpkg.com/@tiptap/extension-table-header@2/dist/index.js"
+    }
+}
+</script>
+<script>
+(function () {
+    // Настройка CSRF для fetch
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    const editorEl = document.getElementById("editor");
+    const contentInput = document.getElementById("content-input");
+    const aiMenu = document.getElementById("ai-menu");
+    const aiMenuBtn = document.getElementById("ai-menu-btn");
+    const aiStatus = document.getElementById("ai-status");
+
+    // Контент уже отрендерен сервером — сохраняем для инициализации TipTap
+    const initialHtml = editorEl.innerHTML;
+
+    let editor = null;
+    let processing = false;
+
+    async function init() {
+        const { Editor } = await import("@tiptap/core");
+        const StarterKit = (await import("@tiptap/starter-kit")).default;
+        const { default: Table } = await import("@tiptap/extension-table");
+        const { default: TableRow } = await import("@tiptap/extension-table-row");
+        const { default: TableHeader } = await import("@tiptap/extension-table-header");
+        const { default: TableCell } = await import("@tiptap/extension-table-cell");
+
+        editor = new Editor({
+            element: editorEl,
+            extensions: [
+                StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+                Table.configure({ resizable: true }),
+                TableRow,
+                TableHeader,
+                TableCell,
+            ],
+            content: initialHtml,
+        });
+
+        document.querySelectorAll(".toolbar-btn").forEach(btn => {
+            btn.addEventListener("click", () => runCommand(btn.dataset.cmd));
+        });
+    }
+
+    function runCommand(cmd) {
+        if (!editor) return;
+        const chain = editor.chain().focus();
+        switch (cmd) {
+            case "undo": chain.undo().run(); break;
+            case "redo": chain.redo().run(); break;
+            case "bold": chain.toggleBold().run(); break;
+            case "italic": chain.toggleItalic().run(); break;
+            case "h1": chain.toggleHeading({ level: 1 }).run(); break;
+            case "h2": chain.toggleHeading({ level: 2 }).run(); break;
+            case "h3": chain.toggleHeading({ level: 3 }).run(); break;
+            case "bulletList": chain.toggleBulletList().run(); break;
+            case "orderedList": chain.toggleOrderedList().run(); break;
+            case "insertTable": chain.insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(); break;
+            case "addRow": chain.addRowAfter().run(); break;
+        }
+    }
+
+    async function runAiCommand(command) {
+        if (!editor || processing) return;
+        processing = true;
+        aiStatus.classList.remove("hidden");
+        aiStatus.textContent = "Обработка AI…";
+        const payload = new URLSearchParams();
+        payload.append("command", command);
+        payload.append("content", editor.getHTML());
+        try {
+            await sendAiCommand(payload);
+        } finally {
+            processing = false;
+            aiStatus.classList.add("hidden");
+        }
+    }
+
+    async function sendAiCommand(payload) {
+        const url = "{% url 'materials:ai_command' material.pk %}";
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: payload,
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.error || "AI-команда не выполнена");
+            return;
+        }
+        editor.commands.setContent(data.html || "");
+    }
+
+    aiMenuBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        aiMenu.classList.toggle("hidden");
+    });
+    document.addEventListener("click", () => aiMenu.classList.add("hidden"));
+
+    document.querySelectorAll("[data-ai]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            aiMenu.classList.add("hidden");
+            runAiCommand(btn.dataset.ai);
+        });
+    });
+
+    // Сохранение — content заполняется значением редактора
+    const form = document.getElementById("material-form");
+    form.addEventListener("submit", () => {
+        contentInput.value = editor ? editor.getHTML() : initialHtml;
+    });
+
+    init();
+})();
+</script>
+{% endblock %}

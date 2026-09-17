@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]git 
+*.egg-info/
+.venv/
+venv/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+media/*
+!media/.gitkeep
+staticfiles/
+
+# Environment
+.env
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Misc
+*.tmp

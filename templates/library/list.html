@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Библиотека · Портал учителя{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <h1 class="text-3xl font-semibold mb-2">Библиотека готовых материалов</h1>
+    <p class="text-neutral-500 mb-6">Опубликованные учителями материалы — скачивайте и используйте.</p>
+
+    <form method="get" class="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+            <label class="block text-sm font-medium text-neutral-500 mb-1">Класс</label>
+            <select name="grade" onchange="this.form.submit()"
+                    class="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm">
+                <option value="">Все классы</option>
+                {% for grade in grades %}
+                    <option value="{{ grade.pk }}" {% if selected.grade == grade.pk|stringformat:"s" %}selected{% endif %}>
+                        {{ grade.number }} класс
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-neutral-500 mb-1">Предмет</label>
+            <select name="subject" onchange="this.form.submit()"
+                    class="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm">
+                <option value="">Все предметы</option>
+                {% for subject in subjects %}
+                    <option value="{{ subject.pk }}" {% if selected.subject == subject.pk|stringformat:"s" %}selected{% endif %}>
+                        {{ subject.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-neutral-500 mb-1">Тип материала</label>
+            <select name="type" onchange="this.form.submit()"
+                    class="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm">
+                <option value="">Все типы</option>
+                {% for type in types %}
+                    <option value="{{ type.pk }}" {% if selected.type == type.pk|stringformat:"s" %}selected{% endif %}>
+                        {{ type.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+
+    {% if materials %}
+        <div class="grid grid-cols-1 gap-4">
+            {% for material in materials %}
+                <div class="bg-white rounded-xl border border-neutral-200 p-5 flex items-center justify-between gap-4 hover:shadow-sm">
+                    <div>
+                        <h3 class="font-medium text-neutral-900">{{ material.title }}</h3>
+                        <p class="text-sm text-neutral-500 mt-1">
+                            {{ material.subject.name }} · {{ material.grade.number }} класс ·
+                            {{ material.material_type.name }} · {{ material.user.full_name|default:material.user.email }}
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <a href="{% url 'library:download' material.pk 'docx' %}"
+                           class="px-3 py-2 rounded-lg border border-neutral-300 text-sm text-neutral-700 hover:bg-neutral-50">DOCX</a>
+                        <a href="{% url 'library:download' material.pk 'pdf' %}"
+                           class="px-3 py-2 rounded-lg border border-neutral-300 text-sm text-neutral-700 hover:bg-neutral-50">PDF</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="bg-white rounded-xl border border-dashed border-neutral-300 p-12 text-center text-neutral-400">
+            В библиотеке пока нет опубликованных материалов.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

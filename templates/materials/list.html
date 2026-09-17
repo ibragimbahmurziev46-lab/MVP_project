@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Мои материалы · Портал учителя{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-semibold">Мои материалы</h1>
+        <a href="{% url 'generator:home' %}"
+           class="px-4 py-2 rounded-lg bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-700">
+            Создать материал
+        </a>
+    </div>
+
+    <form method="get" class="mb-6">
+        <label for="type" class="text-sm font-medium text-neutral-500 mr-2">Фильтр по типу:</label>
+        <select name="type" id="type" onchange="this.form.submit()"
+                class="rounded-lg border border-neutral-300 px-3 py-2 text-sm">
+            <option value="">Все типы</option>
+            {% for type in types %}
+                <option value="{{ type.pk }}" {% if selected_type == type.pk|stringformat:"s" %}selected{% endif %}>
+                    {{ type.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if materials %}
+        <div class="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+            <table class="w-full text-sm">
+                <thead class="bg-neutral-50 text-neutral-500 uppercase text-xs">
+                    <tr>
+                        <th class="px-4 py-3 text-left">Материал</th>
+                        <th class="px-4 py-3 text-left">Предмет</th>
+                        <th class="px-4 py-3 text-left">Класс</th>
+                        <th class="px-4 py-3 text-left">Создан</th>
+                        <th class="px-4 py-3 text-right">Действия</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-100">
+                    {% for material in materials %}
+                        <tr class="hover:bg-neutral-50">
+                            <td class="px-4 py-3">
+                                <span class="font-medium text-neutral-800">{{ material.title }}</span>
+                                <span class="block text-xs text-neutral-400">{{ material.material_type.name }}</span>
+                            </td>
+                            <td class="px-4 py-3">{{ material.subject.name }}</td>
+                            <td class="px-4 py-3">{{ material.grade.number }}</td>
+                            <td class="px-4 py-3 text-neutral-500">{{ material.updated_at|date:"d.m.Y" }}</td>
+                            <td class="px-4 py-3 text-right whitespace-nowrap">
+                                <a href="{{ material.get_absolute_url }}" class="text-neutral-900 font-medium hover:underline">Открыть</a>
+                                <a href="{% url 'materials:duplicate' material.pk %}" class="ml-3 text-neutral-600 hover:underline">Копировать</a>
+                                <a href="{% url 'materials:export' material.pk 'docx' %}" class="ml-3 text-neutral-600 hover:underline">DOCX</a>
+                                <a href="{% url 'materials:export' material.pk 'pdf' %}" class="ml-3 text-neutral-600 hover:underline">PDF</a>
+                                <form method="post" action="{{ material.get_absolute_url }}" class="inline ml-3" onsubmit="return confirm('Удалить материал?');">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <button type="submit" class="text-red-600 hover:underline">Удалить</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="bg-white rounded-xl border border-dashed border-neutral-300 p-12 text-center text-neutral-400">
+            Пока нет материалов.
+            <a href="{% url 'generator:home' %}" class="text-neutral-900 font-medium hover:underline">Создайте первый</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

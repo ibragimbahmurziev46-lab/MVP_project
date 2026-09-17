@@ -1,0 +1,14 @@
+Django>=6.0,<7.0
+djangorestframework>=3.15
+python-docx>=1.1
+python-dotenv>=1.0
+requests>=2.31
+Pillow>=10.0
+reportlab>=4.0
+# PDF rendering that preserves HTML structure on Linux/server:
+# installs fine, but requires GTK system libraries at runtime on Windows.
+weasyprint>=61.0 ; platform_system != 'Windows'
+# Production additions (when moving beyond dev):
+# psycopg[binary]         # PostgreSQL driver
+# redis, celery           # async generation queues
+# boto3 / minio           # S3-compatible file storage

@@ -1,0 +1,359 @@
+[
+  {
+    "model": "subjects.grade",
+    "pk": 1,
+    "fields": {"number": 1, "name": "1 класс"}
+  },
+  {
+    "model": "subjects.grade",
+    "pk": 2,
+    "fields": {"number": 2, "name": "2 класс"}
+  },
+  {
+    "model": "subjects.grade",
+    "pk": 3,
+    "fields": {"number": 3, "name": "3 класс"}
+  },
+  {
+    "model": "subjects.grade",
+    "pk": 4,
+    "fields": {"number": 4, "name": "4 класс"}
+  },
+  {
+    "model": "subjects.grade",
+    "pk": 5,
+    "fields": {"number": 5, "name": "5 класс"}
+  },
+  {
+    "model": "subjects.grade",
+    "pk": 6,
+    "fields": {"number": 6, "name": "6 класс"}
+  },
+  {
+    "model": "subjects.grade",
+    "pk": 7,
+    "fields": {"number": 7, "name": "7 класс"}
+  },
+  {
+    "model": "subjects.grade",
+    "pk": 8,
+    "fields": {"number": 8, "name": "8 класс"}
+  },
+  {
+    "model": "subjects.grade",
+    "pk": 9,
+    "fields": {"number": 9, "name": "9 класс"}
+  },
+  {
+    "model": "subjects.grade",
+    "pk": 10,
+    "fields": {"number": 10, "name": "10 класс"}
+  },
+  {
+    "model": "subjects.grade",
+    "pk": 11,
+    "fields": {"number": 11, "name": "11 класс"}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 1,
+    "fields": {"name": "Русский язык", "slug": "russkiy-yazyk", "is_active": true, "order": 1}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 2,
+    "fields": {"name": "Литература", "slug": "literatura", "is_active": true, "order": 2}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 3,
+    "fields": {"name": "Математика", "slug": "matematika", "is_active": true, "order": 3}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 4,
+    "fields": {"name": "Алгебра", "slug": "algebra", "is_active": true, "order": 4}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 5,
+    "fields": {"name": "Геометрия", "slug": "geometriya", "is_active": true, "order": 5}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 6,
+    "fields": {"name": "История", "slug": "istoriya", "is_active": true, "order": 6}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 7,
+    "fields": {"name": "Обществознание", "slug": "obshchestvoznanie", "is_active": true, "order": 7}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 8,
+    "fields": {"name": "Биология", "slug": "biologiya", "is_active": true, "order": 8}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 9,
+    "fields": {"name": "География", "slug": "geografiya", "is_active": true, "order": 9}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 10,
+    "fields": {"name": "Физика", "slug": "fizika", "is_active": true, "order": 10}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 11,
+    "fields": {"name": "Химия", "slug": "khimiya", "is_active": true, "order": 11}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 12,
+    "fields": {"name": "Информатика", "slug": "informatika", "is_active": true, "order": 12}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 13,
+    "fields": {"name": "Английский язык", "slug": "angliyskiy-yazyk", "is_active": true, "order": 13}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 14,
+    "fields": {"name": "ОБЗР", "slug": "obzr", "is_active": true, "order": 14}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 15,
+    "fields": {"name": "Труд", "slug": "trud", "is_active": true, "order": 15}
+  },
+  {
+    "model": "subjects.subject",
+    "pk": 16,
+    "fields": {"name": "Физическая культура", "slug": "fizicheskaya-kultura", "is_active": true, "order": 16}
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 1,
+    "fields": {
+      "name": "Поурочный план",
+      "slug": "lesson_plan",
+      "is_active": true,
+      "order": 1,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\nДлительность: {{duration}} минут\nТип урока: {{lesson_type}}\nДополнительные блоки: {{blocks}}\n\nСоставь поурочный план.",
+      "structure": [
+        "Цель",
+        "Задачи",
+        "Планируемые результаты",
+        "Этапы урока (с указанием времени и деятельности учителя и учащихся)",
+        "Практическое задание",
+        "Рефлексия",
+        "Домашнее задание"
+      ],
+      "required_fields": ["topic", "duration"],
+      "variables": ["grade", "subject", "topic", "duration", "lesson_type", "blocks"]
+    }
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 2,
+    "fields": {
+      "name": "Тест",
+      "slug": "test",
+      "is_active": true,
+      "order": 2,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\nКоличество вопросов: {{questions}}\nСложность: {{difficulty}}\n\nСоставь тест.",
+      "structure": [
+        "Вопросы с несколькими вариантами ответа и открытыми вопросами",
+        "Ответы для учителя"
+      ],
+      "required_fields": ["topic", "questions"],
+      "variables": ["grade", "subject", "topic", "questions", "difficulty"]
+    }
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 3,
+    "fields": {
+      "name": "Рабочий лист",
+      "slug": "worksheet",
+      "is_active": true,
+      "order": 3,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\n\nСоставь рабочий лист.",
+      "structure": [
+        "Краткая теория",
+        "Примеры",
+        "Простые задания",
+        "Задания средней сложности",
+        "Одно задание повышенной сложности",
+        "Место для ответа"
+      ],
+      "required_fields": ["topic"],
+      "variables": ["grade", "subject", "topic"]
+    }
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 4,
+    "fields": {
+      "name": "Презентация",
+      "slug": "presentation",
+      "is_active": true,
+      "order": 4,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\nКоличество слайдов: {{slides}}\nСтиль: {{style}}\n\nСначала сформируй структуру презентации по слайдам.",
+      "structure": [
+        "Структура презентации по слайдам",
+        "Тексты для каждого слайда",
+        "Рекомендации по оформлению"
+      ],
+      "required_fields": ["topic", "slides"],
+      "variables": ["grade", "subject", "topic", "slides", "style"]
+    }
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 5,
+    "fields": {
+      "name": "КТП",
+      "slug": "ktp",
+      "is_active": false,
+      "order": 5,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\n\nСоставь календарно-тематическое планирование.",
+      "structure": [
+        "№",
+        "Раздел",
+        "Тема",
+        "Часы",
+        "Планируемая дата",
+        "Фактическая дата"
+      ],
+      "required_fields": ["topic"],
+      "variables": ["grade", "subject", "topic"]
+    }
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 6,
+    "fields": {
+      "name": "Рабочая программа",
+      "slug": "work_program",
+      "is_active": false,
+      "order": 6,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\n\nСоставь рабочую программу.",
+      "structure": [
+        "Титульный лист",
+        "Пояснительная записка",
+        "Цели",
+        "Задачи",
+        "Планируемые результаты",
+        "Содержание дисциплины",
+        "Тематическое планирование",
+        "Формы контроля",
+        "Учебно-методическое обеспечение"
+      ],
+      "required_fields": ["topic"],
+      "variables": ["grade", "subject", "topic"]
+    }
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 7,
+    "fields": {
+      "name": "Конспект урока",
+      "slug": "lesson_notes",
+      "is_active": false,
+      "order": 7,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\n\nСоставь конспект урока.",
+      "structure": [
+        "Цель",
+        "Задачи",
+        "Ход урока",
+        "Рефлексия",
+        "Домашнее задание"
+      ],
+      "required_fields": ["topic"],
+      "variables": ["grade", "subject", "topic"]
+    }
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 8,
+    "fields": {
+      "name": "Контрольная работа",
+      "slug": "control_work",
+      "is_active": false,
+      "order": 8,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\n\nСоставь контрольную работу.",
+      "structure": [
+        "Варианты заданий",
+        "Ответы и критерии оценивания"
+      ],
+      "required_fields": ["topic"],
+      "variables": ["grade", "subject", "topic"]
+    }
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 9,
+    "fields": {
+      "name": "Самостоятельная работа",
+      "slug": "independent_work",
+      "is_active": false,
+      "order": 9,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\n\nСоставь самостоятельную работу.",
+      "structure": [
+        "Задания",
+        "Ответы"
+      ],
+      "required_fields": ["topic"],
+      "variables": ["grade", "subject", "topic"]
+    }
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 10,
+    "fields": {
+      "name": "Карточки с заданиями",
+      "slug": "task_cards",
+      "is_active": false,
+      "order": 10,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\n\nСоставь карточки с заданиями.",
+      "structure": [
+        "Несколько карточек с заданиями разной сложности"
+      ],
+      "required_fields": ["topic"],
+      "variables": ["grade", "subject", "topic"]
+    }
+  },
+  {
+    "model": "subjects.materialtype",
+    "pk": 11,
+    "fields": {
+      "name": "Домашнее задание",
+      "slug": "homework",
+      "is_active": false,
+      "order": 11,
+      "system_prompt": "Ты образовательный методист. Не изменяй класс и дисциплину.",
+      "user_template": "Класс: {{grade}}\nПредмет: {{subject}}\nТема: {{topic}}\n\nСоставь домашнее задание.",
+      "structure": [
+        "Обязательная часть",
+        "Дополнительная часть",
+        "Творческое задание"
+      ],
+      "required_fields": ["topic"],
+      "variables": ["grade", "subject", "topic"]
+    }
+  }
+]

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Регистрация · Портал учителя{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-xl shadow p-8">
+    <h1 class="text-2xl font-semibold mb-6 text-center">Регистрация</h1>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-1">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}<p class="text-xs text-red-600">{{ error }}</p>{% endfor %}
+            </div>
+        {% endfor %}
+        {% if form.non_field_errors %}
+            <div class="p-3 rounded-lg bg-red-50 text-red-800 text-sm border border-red-200">
+                {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+            </div>
+        {% endif %}
+        <button type="submit"
+                class="w-full py-2.5 rounded-lg bg-neutral-900 text-white font-medium hover:bg-neutral-700 transition">
+            Зарегистрироваться
+        </button>
+    </form>
+    <p class="mt-6 text-center text-sm text-neutral-500">
+        Уже есть аккаунт?
+        <a href="{% url 'accounts:login' %}" class="text-neutral-900 font-medium hover:underline">Войти</a>
+    </p>
+</div>
+{% endblock %}
